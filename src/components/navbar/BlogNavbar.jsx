@@ -1,8 +1,11 @@
 import React from "react";
 import { Button, Container, Navbar, Dropdown, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { PersonFill } from 'react-bootstrap-icons';
 import logo from "../../assets/logo.png";
 import "./styles.css";
+import 'react-toastify/dist/ReactToastify.css';
+
 const NavBar = props => {
   return (
     <Navbar expand="lg" className="blog-navbar" fixed="top">
@@ -27,27 +30,24 @@ const NavBar = props => {
 
         <Dropdown>
           <Dropdown.Toggle variant="dark" id="dropdown-basic">
-            Dropdown Button
+            <PersonFill />
           </Dropdown.Toggle>
 
-          <Dropdown.Menu>
+          <Dropdown.Menu className="login-menu" align="end">
             <Form>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+              <Form.Group className="my-3 mx-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" />
-                <Form.Text className="text-muted">
-                  We'll never share your email with anyone else.
-                </Form.Text>
               </Form.Group>
 
-              <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Group className="my-3 mx-3" controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicCheckbox">
+              <Form.Group className="my-3 mx-3" controlId="formBasicCheckbox">
                 <Form.Check type="checkbox" label="Check me out" />
               </Form.Group>
-              <Button variant="primary" type="submit">
+              <Button variant="primary" type="submit" className="my-3 mx-3">
                 Submit
               </Button>
             </Form>
