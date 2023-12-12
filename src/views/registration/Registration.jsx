@@ -122,6 +122,7 @@ const Registration = ({ blogPosts, setblogPosts }) => {
                 <Form.Group className="mt-3">
                     <Form.Label>Email</Form.Label>
                     <Form.Control
+                        type="email"
                         size="lg"
                         placeholder="Email Address"
                         required
@@ -133,6 +134,7 @@ const Registration = ({ blogPosts, setblogPosts }) => {
                 <Form.Group className="mt-3">
                     <Form.Label>Password</Form.Label>
                     <Form.Control
+                        type="password"
                         size="lg"
                         placeholder="Password"
                         required

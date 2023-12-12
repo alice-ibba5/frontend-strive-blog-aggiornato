@@ -5,8 +5,54 @@ import { PersonFill } from 'react-bootstrap-icons';
 import logo from "../../assets/logo.png";
 import "./styles.css";
 import 'react-toastify/dist/ReactToastify.css';
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const NavBar = props => {
+
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const navigate = useNavigate()
+
+  const handleLogin = async (e) => {
+    e.preventDefault()
+
+    const response = await fetch("http://localhost:3030/api/authors/session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+
+    const data = await response.json()
+
+    if (data.token) {
+      localStorage.setItem("authorId", data.authorId)
+      localStorage.setItem("token", data.token)
+    }
+
+    const { name, surname } = data;
+
+    const dataResponse = await fetch(`http://localhost:3030/api/authors/${data._id}`, {
+
+      method: "GET",
+    });
+
+    if (dataResponse.ok) {
+
+      return (
+        `${dataResponse.name}`
+      )
+    }
+
+
+    navigate("/")
+  }
+
   return (
     <Navbar expand="lg" className="blog-navbar" fixed="top">
       <Container className="justify-content-between">
@@ -35,14 +81,22 @@ const NavBar = props => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="login-menu" align="end">
-              <Form>
+              <Form onSubmit={handleLogin}>
                 <Form.Group className="my-3 mx-3" controlId="formBasicEmail">
                   <Form.Label>Email address</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" />
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)} />
                 </Form.Group>
                 <Form.Group className="my-3 mx-3" controlId="formBasicPassword">
                   <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Password" />
+                  <Form.Control
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)} />
                 </Form.Group>
                 <Form.Group className="my-3 mx-3" controlId="formBasicCheckbox">
                   <Form.Check type="checkbox" label="Check me out" />
