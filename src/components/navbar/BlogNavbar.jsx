@@ -9,6 +9,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify'
 import BlogAuthor from "../../components/blog/blog-author/BlogAuthor";
+import { GoogleLoginButton } from "react-social-login-buttons"
 
 const NavBar = props => {
 
@@ -68,7 +69,7 @@ const NavBar = props => {
       console.error("Error fetching data:", error);
     }
   }
-  console.log(author)
+
 
 
 
@@ -112,9 +113,20 @@ const NavBar = props => {
                   <div className="d-flex align-items-center">
                     <h6 className="mx-3">Nuovo?</h6> <Button as={Link} to="/register" variant="outline-info"><h6>Registrati</h6></Button>
                   </div>
-                  <Button variant="primary" type="submit" className="my-3 mx-3" >
-                    Log In
-                  </Button>
+                  <div className="d-flex align-items-center">
+                    <Button variant="primary" type="submit" className="my-3 mx-3" >
+                      LogIn
+                    </Button>
+
+                    <GoogleLoginButton className="me-3"
+                      onClick={() => {
+                        window.location.assign(
+                          "http://localhost:3030/api/authors/google"
+                        )
+                      }}
+                    />
+                  </div>
+
                 </Form>
               </Dropdown.Menu>
             </Dropdown>

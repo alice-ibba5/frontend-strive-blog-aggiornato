@@ -6,7 +6,7 @@ import BlogLike from "../../components/likes/BlogLike";
 import "./styles.css";
 
 const Blog = (props) => {
-  const { author, authorId } = props;
+  const { author, setAuthor, authorId } = props;
   const [blog, setBlog] = useState(null);
   const [comments, setComments] = useState({});
   const [loading, setLoading] = useState(true);
@@ -30,6 +30,7 @@ const Blog = (props) => {
       const itemValue = localStorage.getItem(authorId);
       if (itemValue !== null) {
         setIsLoggedIn(true);
+        console.log(setIsLoggedIn)
       } else {
         setIsLoggedIn(false);
       }
@@ -40,6 +41,7 @@ const Blog = (props) => {
     }
   };
 
+  console.log(setIsLoggedIn)
   useEffect(() => {
     getPost();
   }, []);
