@@ -79,7 +79,7 @@ const NavBar = props => {
           <img className="blog-navbar-brand" alt="logo" src={logo} />
         </Navbar.Brand>
 
-        <div className="d-flex">
+        <div className="d-flex ">
 
 
           {!author ? (

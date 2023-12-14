@@ -6,13 +6,14 @@ import BlogLike from "../../components/likes/BlogLike";
 import "./styles.css";
 
 const Blog = (props) => {
-  const { author } = props;
+  const { author, authorId } = props;
   const [blog, setBlog] = useState(null);
   const [comments, setComments] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { id } = useParams();
   const [file, setFile] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const getPost = async () => {
     try {
@@ -24,6 +25,14 @@ const Blog = (props) => {
 
       const data = await response.json();
       setBlog(data);
+
+      // Check se il localstorage contiene qualcosa o no
+      const itemValue = localStorage.getItem(authorId);
+      if (itemValue !== null) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -85,39 +94,84 @@ const Blog = (props) => {
     }
   };
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // Funzione per gestire il login
-  const handleLogin = () => {
-    const itemValue = localStorage.getItem('');
-    if (itemValue !== null) {
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
 
-  };
+
+
+
 
   return (
-    <>
-      {isLoggedIn ? (
-        <div>
-          <h5>Modifica la cover:</h5>
-          <input type="file"
-            //value={file}
-            multiple={false}
-            onChange={e => setFile(e.target.files[0])} />
-          <Button
-            type="submit"
-            size="lg"
-            variant="dark"
-            style={{
-              marginLeft: "1em",
+
+    isLoggedIn, blog ? (
+      <div className="blog-details-root">
+        <Container>
+          <Image className="blog-details-cover" src={blog.cover} fluid />
+
+          <div>
+            <h5>Modifica la cover:</h5>
+            <input type="file"
+              //value={file}
+              multiple={false}
+              onChange={e => setFile(e.target.files[0])} />
+            <Button
+              type="submit"
+              size="lg"
+              variant="dark"
+              style={{
+                marginLeft: "1em",
+              }}
+              onClick={() => !!file && handleSendPic()}
+            >Invia</Button>
+          </div>
+
+          <h1 className="blog-details-title">{blog.title}</h1>
+          <div className="blog-details-container">
+            <div className="blog-details-author">
+              <BlogAuthor {...blog.author} />
+            </div>
+            <div className="blog-details-info">
+              <div>{blog.createdAt}</div>
+              <div>{`lettura da ${blog.readTime.value} ${blog.readTime.unit}`}</div>
+              <div
+                style={{
+                  marginTop: 20,
+                }}
+              >
+                <BlogLike defaultLikes={["123"]} onChange={console.log} />
+              </div>
+            </div>
+          </div>
+
+          <div
+            dangerouslySetInnerHTML={{
+              __html: blog.content,
             }}
-            onClick={() => !!file && handleSendPic()}
-          >Invia</Button>
-        </div>
-      ) : (
-        blog && <div className="blog-details-root">
+          ></div>
+
+          <h4 className="mt-3">Comments:</h4>
+
+          <Col className="d-flex justify-content-between">
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Author</th>
+                  <th>Comment</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comments.map((comment) =>
+                  <tr>
+                    <td>{`${comment.author.name} ${comment.author.surname}`}</td>
+                    <td>{`${comment.text}`}</td>
+                  </tr>)}
+              </tbody>
+            </Table>
+          </Col>
+
+        </Container>
+      </div>
+    ) : (
+      !isLoggedIn, blog && <>
+        <div className="blog-details-root">
           <Container>
             <Image className="blog-details-cover" src={blog.cover} fluid />
 
@@ -167,7 +221,9 @@ const Blog = (props) => {
 
           </Container>
         </div>
-      )}</>
+      </>
+
+    )
   )
 };
 
