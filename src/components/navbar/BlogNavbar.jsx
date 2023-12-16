@@ -16,7 +16,10 @@ const NavBar = props => {
   const [author, setAuthor] = useState(null)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate()
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -50,11 +53,14 @@ const NavBar = props => {
         });
       }
 
-      const { token, authorId } = data;
+      const data2 = {
+        authorId: localStorage.getItem("authorId"),
+        token: localStorage.getItem("token"),
+      }
 
-      const responseGet = await fetch(`http://localhost:3030/api/authors/${authorId}`, {
+      const responseGet = await fetch(`http://localhost:3030/api/authors/${data2.authorId}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${data2.token}`,
           method: "GET",
         },
       });
@@ -62,15 +68,29 @@ const NavBar = props => {
         throw new Error(`HTTP error! Status: ${responseGet.status}`);
       } else {
 
-        const data2 = await responseGet.json();
-        setAuthor(data2);
+        const data3 = await responseGet.json();
+        setAuthor(data3);
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }
 
+  const isLogged = async () => {
 
+    // Check se il localstorage contiene qualcosa o no
+    const itemValue = localStorage.getItem("value");
+    if (itemValue !== null) {
+      setIsLoggedIn(true);
+      console.log(setIsLoggedIn)
+    } else {
+      setIsLoggedIn(false);
+    }
+  };
+
+  useEffect(() => {
+    isLogged();
+  }, []);
 
 
   return (
@@ -80,10 +100,10 @@ const NavBar = props => {
           <img className="blog-navbar-brand" alt="logo" src={logo} />
         </Navbar.Brand>
 
-        <div className="d-flex ">
+        <div className="d-flex">
 
 
-          {!author ? (
+          {(!author && !isLoggedIn) ? (
             <Dropdown>
               <Dropdown.Toggle variant="dark" id="dropdown-basic">
                 <PersonFill />
@@ -111,7 +131,7 @@ const NavBar = props => {
                     <Form.Check type="checkbox" label="Check me out" />
                   </Form.Group>
                   <div className="d-flex align-items-center">
-                    <h6 className="mx-3">Nuovo?</h6> <Button as={Link} to="/register" variant="outline-info"><h6>Registrati</h6></Button>
+                    <h6 className="mx-3">Nuovo?</h6> <Button as={Link} to="/register" variant="primary"><h6>Registrati</h6></Button>
                   </div>
                   <div className="d-flex align-items-center">
                     <Button variant="primary" type="submit" className="my-3 mx-3" >
@@ -131,7 +151,7 @@ const NavBar = props => {
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            author && <>
+            <>
               <Button as={Link} to="/new" className="blog-navbar-add-button bg-dark me-3" size="lg">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

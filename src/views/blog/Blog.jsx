@@ -26,24 +26,33 @@ const Blog = (props) => {
       const data = await response.json();
       setBlog(data);
 
-      // Check se il localstorage contiene qualcosa o no
-      const itemValue = localStorage.getItem(authorId);
-      if (itemValue !== null) {
-        setIsLoggedIn(true);
-        console.log(setIsLoggedIn)
-      } else {
-        setIsLoggedIn(false);
-      }
+
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
-      setLoading(false);
+
     }
   };
 
-  console.log(setIsLoggedIn)
+
   useEffect(() => {
     getPost();
+  }, []);
+
+  const changeAvatar = async () => {
+
+    // Check se il localstorage contiene qualcosa o no
+    const itemValue = localStorage.getItem("authorId");
+    if (itemValue !== null) {
+      setIsLoggedIn(true);
+      console.log(setIsLoggedIn)
+    } else {
+      setIsLoggedIn(false);
+    }
+  };
+
+  useEffect(() => {
+    changeAvatar();
   }, []);
 
   const getComments = async () => {
@@ -101,9 +110,9 @@ const Blog = (props) => {
 
 
 
-  return (
+  return blog && (
 
-    isLoggedIn, blog ? (
+    (isLoggedIn) ? (
       <div className="blog-details-root">
         <Container>
           <Image className="blog-details-cover" src={blog.cover} fluid />
@@ -172,7 +181,7 @@ const Blog = (props) => {
         </Container>
       </div>
     ) : (
-      !isLoggedIn, blog && <>
+      <>
         <div className="blog-details-root">
           <Container>
             <Image className="blog-details-cover" src={blog.cover} fluid />
