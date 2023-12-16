@@ -8,8 +8,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify'
-import BlogAuthor from "../../components/blog/blog-author/BlogAuthor";
 import { GoogleLoginButton } from "react-social-login-buttons"
+import queryString from 'query-string';
 
 const NavBar = props => {
 
@@ -76,6 +76,25 @@ const NavBar = props => {
     }
   }
 
+
+
+  const GoogleCallbackComponent = () => {
+
+    // Ottieni i parametri dell'URL
+    const queryParams = queryString.parse(window.location.search);
+
+    // Estrai il token e l'id dai parametri
+    const { token, userId } = queryParams;
+
+    // Salva il token e l'id nel localStorage
+    localStorage.setItem('token', token);
+    localStorage.setItem('authorId', userId);
+
+  }
+  useEffect(() => {
+    GoogleCallbackComponent();
+  }, []);
+
   const isLogged = async () => {
     const storedAuthorId = localStorage.getItem("authorId");
     const storedToken = localStorage.getItem("token");
@@ -109,6 +128,24 @@ const NavBar = props => {
     isLogged();
   }, []);
 
+  /*const handleGoogleLogin = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/authors/google-callback");
+      const data = await response.json();
+   
+      // Salva l'ID e il token nel localStorage
+      localStorage.setItem("userId", data.userId);
+      localStorage.setItem("token", data.token);
+   
+      // Esegui altre azioni necessarie dopo il login
+    } catch (error) {
+      console.error("Errore durante il login con Google:", error);
+    }
+  };
+   
+  useEffect(() => {
+    handleGoogleLogin();
+  }, []);*/
 
   return (
     <Navbar expand="lg" className="blog-navbar" fixed="top">
@@ -234,6 +271,6 @@ const NavBar = props => {
       </Container>
     </Navbar>
   );
-}
+};
 
 export default NavBar;
