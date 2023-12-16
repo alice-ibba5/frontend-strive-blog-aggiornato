@@ -19,8 +19,6 @@ const NavBar = props => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate()
 
-
-
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
@@ -52,6 +50,7 @@ const NavBar = props => {
           theme: "dark",
         });
       }
+      window.location.reload();
 
       const data2 = {
         authorId: localStorage.getItem("authorId"),
@@ -76,30 +75,26 @@ const NavBar = props => {
     }
   }
 
-  const GoogleCallbackComponent = () => {
-
-    // Ottengo i parametri dell'URL
+  const GoogleCallbackComponent = async () => {
     const queryParams = queryString.parse(window.location.search);
-
-    // Estraggo il token e l'id dai parametri
     const { token, userId } = queryParams;
 
-    if (token, userId) {
-      // Salvo il token e l'id nel localStorage
+    if (token && userId) {
       localStorage.setItem('token', token);
       localStorage.setItem('authorId', userId);
     }
+  };
 
-  }
   useEffect(() => {
     GoogleCallbackComponent();
+    console.log("useEffect is triggered");
   }, []);
 
   const isLogged = async () => {
-    const storedAuthorId = localStorage.getItem("authorId");
-    const storedToken = localStorage.getItem("token");
+    const storedAuthorId = localStorage.getItem('authorId');
+    const storedToken = localStorage.getItem('token');
 
-    if (storedAuthorId && storedToken) {
+    if (storedAuthorId) {
       try {
         const response = await fetch(`http://localhost:3030/api/authors/${storedAuthorId}`, {
           headers: {
@@ -108,25 +103,77 @@ const NavBar = props => {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          setAuthor(data);
+          const authorDetails = await response.json();
+          const authorEmail = authorDetails.email;
+          setAuthor(authorDetails);
           setIsLoggedIn(true);
 
-        } else {
-          setIsLoggedIn(false);
+          // Chiamata per verificare se l'utente è già nel database
+          const checkUserResponse = await fetch('http://localhost:3030/api/authors/checkUserExistence', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              authorEmail,
+            }),
+          });
+
+          if (checkUserResponse.ok) {
+            const { userExists } = await checkUserResponse.json();
+
+            if (!userExists) {
+              // L'utente non è ancora nel database, puoi inviare l'email di benvenuto
+
+              try {
+                const response = await fetch('http://localhost:3030/api/verifyEmail', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    authorEmail,
+                  }),
+                });
+
+                if (response.ok) {
+                  const data = await response.json();
+                  toast('Welcome email sent successfully', {
+                    position: 'bottom-right',
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                  });
+                } else {
+                  console.error('Failed to send welcome email:', response.statusText);
+                }
+              } catch (error) {
+                console.error('Error sending welcome email:', error);
+              }
+            }
+          }
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
-        setIsLoggedIn(false);
+        console.error('Error fetching user data:', error);
+
       }
-    } else {
-      setIsLoggedIn(false);
     }
   };
 
   useEffect(() => {
+    console.log("useEffect is triggered");
     isLogged();
   }, []);
+
+
+
+
+
+
 
 
 
