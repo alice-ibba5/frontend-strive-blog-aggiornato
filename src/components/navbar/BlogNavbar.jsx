@@ -77,12 +77,29 @@ const NavBar = props => {
   }
 
   const isLogged = async () => {
+    const storedAuthorId = localStorage.getItem("authorId");
+    const storedToken = localStorage.getItem("token");
 
-    // Check se il localstorage contiene qualcosa o no
-    const itemValue = localStorage.getItem("value");
-    if (itemValue !== null) {
-      setIsLoggedIn(true);
-      console.log(setIsLoggedIn)
+    if (storedAuthorId && storedToken) {
+      try {
+        const response = await fetch(`http://localhost:3030/api/authors/${storedAuthorId}`, {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setAuthor(data);
+          setIsLoggedIn(true);
+
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        setIsLoggedIn(false);
+      }
     } else {
       setIsLoggedIn(false);
     }
@@ -172,27 +189,30 @@ const NavBar = props => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu className="login-menu" align="end">
-                  <div className="my-3 mx-3">
-                    <Row>
-                      <Col xs={"auto"} className="pe-0">
-                        <Image className="blog-author" src={author.avatar} roundedCircle />
-                      </Col>
-                      <Col className="d-flex align-items-center">
-                        <h6 className="mt-2">{author.name} {author.surname}</h6>
-                      </Col>
-                    </Row>
-                  </div>
-                  <Button variant="danger" className="my-3 mx-3"
-                    onClick={() => {
-                      navigate("/")
-                      localStorage.clear()
-                      setAuthor(false)
-                      setEmail("")
-                      setPassword("")
-                    }}
-                  >
-                    Logout
-                  </Button>
+                  {author && isLoggedIn && (
+                    <div className="my-3 mx-3">
+                      <Row>
+                        <Col xs={"auto"} className="pe-0">
+                          <Image className="blog-author" src={author.avatar} roundedCircle />
+                        </Col>
+                        <Col className="d-flex align-items-center">
+                          <h6 className="mt-2">{author.name} {author.surname}</h6>
+                        </Col>
+                      </Row>
+                      <Button variant="danger" className="my-3 mx-3"
+                        onClick={() => {
+                          navigate("/")
+                          localStorage.clear()
+                          setAuthor(false)
+                          setEmail("")
+                          setPassword("")
+                        }}
+                      >
+                        Logout
+                      </Button>
+                    </div>
+                  )}
+
 
                 </Dropdown.Menu>
               </Dropdown>
