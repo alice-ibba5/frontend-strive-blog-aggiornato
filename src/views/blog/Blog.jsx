@@ -3,6 +3,7 @@ import { Container, Image, Spinner, Col, Table, Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import BlogAuthor from "../../components/blog/blog-author/BlogAuthor";
 import BlogLike from "../../components/likes/BlogLike";
+import { ToastContainer, toast } from 'react-toastify'
 import "./styles.css";
 
 const Blog = (props) => {
@@ -94,7 +95,18 @@ const Blog = (props) => {
         console.log(fileDataResponse)
 
         setFile(formData)
-        alert("Cover changed successfully!")
+        toast("Cover changed successfully!", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+
+        window.location.reload();
 
       } else {
         throw new Error(`HTTP error! Status: ${fileResponse.status}`);
@@ -104,11 +116,6 @@ const Blog = (props) => {
       console.log("Error fetching data:", error);
     }
   };
-
-
-
-
-
 
   return blog && (
 
@@ -229,6 +236,19 @@ const Blog = (props) => {
                 </tbody>
               </Table>
             </Col>
+
+            <ToastContainer
+              position="bottom-right"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="dark"
+            />
 
           </Container>
         </div>

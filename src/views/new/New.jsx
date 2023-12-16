@@ -93,6 +93,13 @@ const NewBlogPost = ({ blogPosts, setblogPosts }) => {
     // getPosts();
   };
 
+  useEffect(() => {
+    // Recupera il valore di 'authorId' dal localStorage al montaggio del componente
+    const storedAuthorId = localStorage.getItem('authorId');
+    if (storedAuthorId) {
+      setAuthor(storedAuthorId);
+    }
+  }, []);
 
 
 
@@ -121,7 +128,7 @@ const NewBlogPost = ({ blogPosts, setblogPosts }) => {
             placeholder="2348762397429"
             required
             value={author}
-            onChange={(e) => setAuthor(e.target.value)}
+
 
           />
         </Form.Group>

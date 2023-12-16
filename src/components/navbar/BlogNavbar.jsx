@@ -76,19 +76,19 @@ const NavBar = props => {
     }
   }
 
-
-
   const GoogleCallbackComponent = () => {
 
-    // Ottieni i parametri dell'URL
+    // Ottengo i parametri dell'URL
     const queryParams = queryString.parse(window.location.search);
 
-    // Estrai il token e l'id dai parametri
+    // Estraggo il token e l'id dai parametri
     const { token, userId } = queryParams;
 
-    // Salva il token e l'id nel localStorage
-    localStorage.setItem('token', token);
-    localStorage.setItem('authorId', userId);
+    if (token, userId) {
+      // Salvo il token e l'id nel localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('authorId', userId);
+    }
 
   }
   useEffect(() => {
@@ -128,24 +128,7 @@ const NavBar = props => {
     isLogged();
   }, []);
 
-  /*const handleGoogleLogin = async () => {
-    try {
-      const response = await fetch("http://localhost:3000/api/authors/google-callback");
-      const data = await response.json();
-   
-      // Salva l'ID e il token nel localStorage
-      localStorage.setItem("userId", data.userId);
-      localStorage.setItem("token", data.token);
-   
-      // Esegui altre azioni necessarie dopo il login
-    } catch (error) {
-      console.error("Errore durante il login con Google:", error);
-    }
-  };
-   
-  useEffect(() => {
-    handleGoogleLogin();
-  }, []);*/
+
 
   return (
     <Navbar expand="lg" className="blog-navbar" fixed="top">
@@ -226,29 +209,30 @@ const NavBar = props => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu className="login-menu" align="end">
-                  {author && isLoggedIn && (
-                    <div className="my-3 mx-3">
-                      <Row>
-                        <Col xs={"auto"} className="pe-0">
-                          <Image className="blog-author" src={author.avatar} roundedCircle />
-                        </Col>
-                        <Col className="d-flex align-items-center">
-                          <h6 className="mt-2">{author.name} {author.surname}</h6>
-                        </Col>
-                      </Row>
-                      <Button variant="danger" className="my-3 mx-3"
-                        onClick={() => {
-                          navigate("/")
-                          localStorage.clear()
-                          setAuthor(false)
-                          setEmail("")
-                          setPassword("")
-                        }}
-                      >
-                        Logout
-                      </Button>
-                    </div>
-                  )}
+
+                  <div className="my-3 mx-3">
+                    <Row>
+                      <Col xs={"auto"} className="pe-0">
+                        <Image className="blog-author" src={author.avatar} roundedCircle />
+                      </Col>
+                      <Col className="d-flex align-items-center">
+                        <h6 className="mt-2">{author.name} {author.surname}</h6>
+                      </Col>
+                    </Row>
+                    <Button variant="danger" className="my-3 mx-3"
+                      onClick={() => {
+                        navigate("/")
+                        localStorage.clear()
+                        setAuthor(false)
+                        setIsLoggedIn(false)
+                        setEmail("")
+                        setPassword("")
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </div>
+
 
 
                 </Dropdown.Menu>
