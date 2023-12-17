@@ -217,7 +217,7 @@ const NavBar = props => {
                     <GoogleLoginButton className="me-3"
                       onClick={() => {
                         window.location.assign(
-                          "${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors/google"
+                          `${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors/google`
                         )
                       }}
                     />
