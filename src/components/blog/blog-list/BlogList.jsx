@@ -12,7 +12,7 @@ const BlogList = () => {
     const getPosts = async () => {
       setLoading(true);
       try {
-        let response = await fetch("http://localhost:3030/api/blogposts",
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/blogposts`,
           {
             method: "GET",
             mode: "cors"

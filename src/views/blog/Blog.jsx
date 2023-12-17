@@ -18,7 +18,7 @@ const Blog = (props) => {
 
   const getPost = async () => {
     try {
-      const response = await fetch(`http://localhost:3030/api/blogposts/${id}`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/blogposts/${id}`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -58,7 +58,7 @@ const Blog = (props) => {
 
   const getComments = async () => {
     try {
-      const response = await fetch(`http://localhost:3030/api/blogposts/${id}/comments`);
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/blogposts/${id}/comments`);
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -83,7 +83,7 @@ const Blog = (props) => {
     formData.append("cover", file, "cover");
 
     try {
-      let fileResponse = await fetch(`http://localhost:3030/api/blogposts/${id}/cover`, {
+      let fileResponse = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/blogposts/${id}/cover`, {
 
         method: "PATCH",
         body: formData,

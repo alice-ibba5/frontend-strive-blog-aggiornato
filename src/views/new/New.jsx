@@ -38,7 +38,7 @@ const NewBlogPost = ({ blogPosts, setblogPosts }) => {
     formData.append("cover", file, "cover");
 
     try {
-      let textResponse = await fetch("http://localhost:3030/api/blogposts", {
+      let textResponse = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/blogposts`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -53,7 +53,7 @@ const NewBlogPost = ({ blogPosts, setblogPosts }) => {
         const data = await textResponse.json();
         const { _id } = data;
 
-        const fileResponse = await fetch(`http://localhost:3030/api/blogposts/${_id}/cover`, {
+        const fileResponse = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/blogposts/${_id}/cover`, {
 
           method: "PATCH",
           body: formData,

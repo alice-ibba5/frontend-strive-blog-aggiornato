@@ -17,16 +17,19 @@ const NavBar = (props) => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3030/api/authors/session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+    const response = await fetch(
+      "${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors/session",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      }
+    );
 
     const data = await response.json();
 
@@ -38,7 +41,7 @@ const NavBar = (props) => {
     const { authorId, token } = data;
 
     const dataResponse = await fetch(
-      `http://localhost:3030/api/authors/${authorId}`,
+      `${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors/${authorId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

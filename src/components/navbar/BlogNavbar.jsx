@@ -22,7 +22,7 @@ const NavBar = props => {
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetch("http://localhost:3030/api/authors/session", {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors/session`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +57,7 @@ const NavBar = props => {
         token: localStorage.getItem("token"),
       }
 
-      const responseGet = await fetch(`http://localhost:3030/api/authors/${data2.authorId}`, {
+      const responseGet = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors/${data2.authorId}`, {
         headers: {
           Authorization: `Bearer ${data2.token}`,
           method: "GET",
@@ -96,7 +96,7 @@ const NavBar = props => {
 
     if (storedAuthorId) {
       try {
-        const response = await fetch(`http://localhost:3030/api/authors/${storedAuthorId}`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors/${storedAuthorId}`, {
           headers: {
             Authorization: `Bearer ${storedToken}`,
           },
@@ -109,7 +109,7 @@ const NavBar = props => {
           setIsLoggedIn(true);
 
           // Chiamata per verificare se l'utente è già nel database
-          const checkUserResponse = await fetch('http://localhost:3030/api/authors/checkUserExistence', {
+          const checkUserResponse = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors/checkUserExistence`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const NavBar = props => {
               // L'utente non è ancora nel database, puoi inviare l'email di benvenuto
 
               try {
-                const response = await fetch('http://localhost:3030/api/verifyEmail', {
+                const response = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/verifyEmail`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
@@ -168,14 +168,6 @@ const NavBar = props => {
     console.log("useEffect is triggered");
     isLogged();
   }, []);
-
-
-
-
-
-
-
-
 
   return (
     <Navbar expand="lg" className="blog-navbar" fixed="top">
@@ -225,7 +217,7 @@ const NavBar = props => {
                     <GoogleLoginButton className="me-3"
                       onClick={() => {
                         window.location.assign(
-                          "http://localhost:3030/api/authors/google"
+                          "${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors/google"
                         )
                       }}
                     />
