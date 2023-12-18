@@ -82,6 +82,16 @@ const NavBar = props => {
     if (token && userId) {
       localStorage.setItem('token', token);
       localStorage.setItem('authorId', userId);
+      toast("You are logged in!!", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
     }
   };
 
