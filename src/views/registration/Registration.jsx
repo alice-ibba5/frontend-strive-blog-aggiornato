@@ -70,8 +70,35 @@ const Registration = ({ blogPosts, setblogPosts }) => {
 
                     setFile(formData)
 
+                    try {
+                        const response = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/verifyEmail`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                authorEmail,
+                            }),
+                        });
 
-
+                        if (response.ok) {
+                            const data = await response.json();
+                            toast('Welcome email sent successfully', {
+                                position: 'bottom-right',
+                                autoClose: 5000,
+                                hideProgressBar: false,
+                                closeOnClick: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                progress: undefined,
+                                theme: 'dark',
+                            });
+                        } else {
+                            console.error('Failed to send welcome email:', response.statusText);
+                        }
+                    } catch (error) {
+                        console.error('Error sending welcome email:', error);
+                    }
 
                 } else {
                     throw new Error(`HTTP error! Status: ${fileResponse.status}`);
