@@ -77,7 +77,7 @@ const Registration = ({ blogPosts, setblogPosts }) => {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                authorEmail,
+                                email,
                             }),
                         });
 
