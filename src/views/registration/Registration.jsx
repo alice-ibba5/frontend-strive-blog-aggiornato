@@ -31,7 +31,7 @@ const Registration = ({ blogPosts, setblogPosts }) => {
         formData.append("avatar", file, "avatar");
 
         try {
-            let textResponse = await fetch("${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors", {
+            let textResponse = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/authors`, {
                 headers: {
                     "Content-Type": "application/json",
                 },
