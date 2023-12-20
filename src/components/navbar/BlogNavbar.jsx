@@ -114,7 +114,7 @@ const NavBar = props => {
 
         if (response.ok) {
           const authorDetails = await response.json();
-          const authorEmail = authorDetails.email;
+          const email = authorDetails.email;
           setAuthor(authorDetails);
           setIsLoggedIn(true);
 
@@ -125,7 +125,7 @@ const NavBar = props => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              authorEmail,
+              email,
             }),
           });
 
@@ -142,7 +142,7 @@ const NavBar = props => {
                     'Content-Type': 'application/json',
                   },
                   body: JSON.stringify({
-                    authorEmail,
+                    email,
                   }),
                 });
 
