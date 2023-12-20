@@ -70,6 +70,7 @@ const Registration = ({ blogPosts, setblogPosts }) => {
 
                     setFile(formData)
 
+                    console.log("textData:", textData);
                     try {
                         const response = await fetch(`${process.env.REACT_APP_BACKEND_ENDPOINT}/api/verifyEmail`, {
                             method: 'POST',
@@ -77,7 +78,7 @@ const Registration = ({ blogPosts, setblogPosts }) => {
                                 'Content-Type': 'application/json',
                             },
                             body: JSON.stringify({
-                                email,
+                                email: textData.email,
                             }),
                         });
 
